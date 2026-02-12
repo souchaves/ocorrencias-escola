@@ -1,8 +1,8 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 const supabase = createClient(
-  "https://pwjacmiiuhruheslgjoa.supabase.co/",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3amFjbWlpdWhydWhlc2xnam9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NjM0OTEsImV4cCI6MjA4NjMzOTQ5MX0.7Y_Iy0HEj_RKDoEhfEFFlgmODRy1NjsJbKfXxF-_sT4"
+  "https://dlctpyhdpiywkisdinyl.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsY3RweWhkcGl5d2tpc2RpbnlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4Mzk5MzEsImV4cCI6MjA4NjQxNTkzMX0.6sqflP0MT0-HYfEi0tu1E2H-kDslkn3urxaCjwtroTY"
 );
 
 let alunosPorTurma = {};
@@ -63,28 +63,44 @@ async function carregarDados() {
       return;
     }
   
-    const { error } = await supabase
-    .from("registros")
-    .insert([{
-      turma_id: Number(turma),
-      professor_id: Number(professor),
-      ocorrencia_id: Number(ocorrencia),
-      alunos: alunos,
-      descricao: descricao,
-      data: new Date().toISOString()
-    }]);
+    // 1️⃣ Inserir registro principal (SEM alunos)
+    const { data, error } = await supabase
+      .from("registros")
+      .insert([{
+        turma_id: Number(turma),
+        professor_id: Number(professor),
+        ocorrencia_id: Number(ocorrencia),
+        descricao: descricao,
+        data: new Date().toISOString()
+      }])
+      .select();
   
-  if (error) {
-    console.error("Erro ao registrar:", error);
-    alert("Erro ao registrar ocorrência");
-    return;
-  }
-      
+    if (error) {
+      console.error("Erro ao registrar:", error);
+      alert("Erro ao registrar ocorrência");
+      return;
+    }
+  
+    const registroId = data[0].id;
+  
+    // 2️⃣ Inserir cada aluno na tabela registro_alunos
+    for (let alunoId of alunos) {
+      const { error: erroAluno } = await supabase
+        .from("registro_alunos")
+        .insert([{
+          registro_id: registroId,
+          aluno_id: alunoId
+        }]);
+  
+      if (erroAluno) {
+        console.error("Erro ao vincular aluno:", erroAluno);
+      }
+    }
   
     alert("Ocorrência registrada com sucesso!");
-
-
   };
+
+
   carregarDados();
 
   window.abrirRelatorios = function () {

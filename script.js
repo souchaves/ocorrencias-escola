@@ -68,6 +68,9 @@ window.registrar = async function () {
   }
 
   // 🔹 Inserir registro principal
+  const dataOcorrencia = document.getElementById("dataOcorrencia").value;
+
+
   const { data: registro, error } = await supabase
     .from("registros")
     .insert({
@@ -76,7 +79,14 @@ window.registrar = async function () {
       ocorrencia_id: Number(ocorrencia),
       descricao: descricao,
       retorna_sala: retornaSala,
-      data: new Date().toISOString()
+
+      // LINHA TEMPORARIA//
+      data: dataOcorrencia 
+          ? new Date(dataOcorrencia).toISOString() 
+          : new Date().toISOString()
+ 
+
+      //data: new Date().toISOString()//
     })
     .select()
     .single();

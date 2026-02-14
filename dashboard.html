@@ -45,27 +45,26 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <div class="card shadow">
-          <div class="card-header">Ocorrências por Turma</div>
-          <div class="card-body">
-            <ul id="porTurma"></ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 mb-3">
-        <div class="card shadow">
-          <div class="card-header">Ocorrências por Tipo</div>
-          <div class="card-body">
-            <ul id="porTipo"></ul>
-          </div>
-        </div>
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Ocorrências por Turma</h5>
+        <div id="porTurma"></div>
       </div>
     </div>
-
-  </div>
+    
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Ocorrências por Tipo</h5>
+        <div id="porTipo"></div>
+      </div>
+    </div>
+    
+    <div class="card border-primary shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">📌 Destaques</h5>
+        <div id="destaque"></div>
+      </div>
+    </div>
 
   <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
